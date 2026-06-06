@@ -26,7 +26,7 @@
     }
   },
 
-    "sidebar_action": {
+  "sidebar_action": {
     "default_title": "Quantix",
     "default_panel": "index.html",
     "default_icon": {
@@ -39,6 +39,20 @@
     }
   },
 
+  "host_permissions": ["https://v6.exchangerate-api.com/*"],
 
-  "host_permissions": ["https://v6.exchangerate-api.com/*"]
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "optional_permissions": ["bookmarks", "topSites", "search"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "quantix@pro-bandey.com",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  }
 }
