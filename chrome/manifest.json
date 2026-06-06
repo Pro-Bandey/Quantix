@@ -36,8 +36,6 @@
 
   "permissions": ["sidePanel", "contextMenus"],
 
-  "host_permissions": ["https://v6.exchangerate-api.com/*"],
-
   "background": {
     "service_worker": "./background.js"
   }

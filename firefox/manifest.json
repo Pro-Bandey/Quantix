@@ -40,9 +40,6 @@
     }
   },
 
-  "permissions": ["contextMenus"],
-  "host_permissions": ["https://v6.exchangerate-api.com/*"],
-
   "background": {
     "scripts": ["background.js"]
   },
