@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantix</title>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+
+<body>
+    <div id="menu-overlay" class="menu-overlay"></div>
+    <div id="menu-sidebar" class="menu-sidebar">
+        <div class="menu-header">
+            <h2 class="menu-title">Quantix Vertors</h2>
+            <button id="close-menu-btn" class="close-menu-button">×</button>
+        </div>
+        <div class="menu-items-container">
+            <button id="calculator-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-calc"></use></svg>
+                <span class="menu-item-text">Calculator</span>
+            </button>
+            <button id="currency-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-currency"></use></svg>
+                <span class="menu-item-text">Currency Converter</span>
+            </button>
+            <button id="length-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-lenght"></use></svg>
+                <span class="menu-item-text">Length / Distance</span>
+            </button>
+            <button id="mass-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-mass"></use></svg>
+                <span class="menu-item-text">Mass / Weight</span>
+            </button>
+            <button id="temperature-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-temprature"></use></svg>
+                <span class="menu-item-text">Temperature</span>
+            </button>
+            <button id="volume-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-volume"></use></svg>
+                <span class="menu-item-text">Volume</span>
+            </button>
+            <button id="area-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-area"></use></svg>
+                <span class="menu-item-text">Area</span>
+            </button>
+            <button id="speed-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-speed"></use></svg>
+                <span class="menu-item-text">Speed</span>
+            </button>
+            <button id="time-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-time"></use></svg>
+                <span class="menu-item-text">Time</span>
+            </button>
+            <button id="age-menu-btn" class="menu-item-button">
+                <svg class="menu-item-icon"><use href="src/icons.svg#icon-age"></use></svg>
+                <span class="menu-item-text">Age Extractor</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="calculator-page" class="page-content">
+        <div class="page-header">
+            <button id="menu-btn-calculator" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Calculator</h1>
+            <div class="spacer"></div>
+        </div>
+        <div class="calculator-display">
+            <div class="equation-display">
+                <span id="equation"></span>
+            </div>
+            <div class="result-display">
+                <span id="result">0</span>
+            </div>
+        </div>
+        <div class="calculator-buttons-grid">
+            <button id="ac-btn" class="calc-button action-orange span-2">AC</button>
+            <button id="backspace-btn" class="calc-button">
+                <img src="src/backspace.png" alt="Delete" class="h-6">
+            </button>
+            <button id="divide-btn" class="calc-button">÷</button>
+            <button id="7-btn" class="calc-button">7</button>
+            <button id="8-btn" class="calc-button">8</button>
+            <button id="9-btn" class="calc-button">9</button>
+            <button id="mult-btn" class="calc-button">×</button>
+            <button id="4-btn" class="calc-button">4</button>
+            <button id="5-btn" class="calc-button">5</button>
+            <button id="6-btn" class="calc-button">6</button>
+            <button id="plus-btn" class="calc-button">+</button>
+            <button id="1-btn" class="calc-button">1</button>
+            <button id="2-btn" class="calc-button">2</button>
+            <button id="3-btn" class="calc-button">3</button>
+            <button id="minus-btn" class="calc-button">-</button>
+            <button id="0-btn" class="calc-button">0</button>
+            <button id="dot-btn" class="calc-button">.</button>
+            <button id="equal-btn" class="calc-button span-2">=</button>
+        </div>
+    </div>
+
+    <div id="currency-page" class="page-content hidden">
+        <div class="page-header">
+            <button id="menu-btn-currency" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Currency</h1>
+            <div class="spacer"></div>
+        </div>
+        <div id="loading-indicator" class="loading-indicator">
+            <p>Loading rates...</p>
+        </div>
+        <div id="converter-section" class="converter-section hidden">
+            <div class="converter-card">
+                <label class="converter-label">From:</label>
+                <input type="number" id="currency-input" class="converter-input" placeholder="0" value="100">
+                <select id="currency-from-unit" class="custom-select">
+                    <option value="">Loading currencies...</option>
+                </select>
+            </div>
+            <div class="swap-button-container">
+                <button id="currency-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+            </div>
+            <div class="converter-card">
+                <label class="converter-label">To:</label>
+                <div class="converter-output-display">
+                    <span id="currency-output">0.00</span>
+                </div>
+                <select id="currency-to-unit" class="custom-select">
+                    <option value="">Loading currencies...</option>
+                </select>
+            </div>
+            <div class="last-updated-info">
+                <p>Last updated: <span id="last-updated">Loading...</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="length-page" class="page-content hidden">
+        <div class="page-header">
+            <button id="menu-btn-length" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Length / Distance</h1>
+            <div class="spacer"></div>
+        </div>
+        <div class="converter-section">
+            <div class="converter-card">
+                <label class="converter-label">From:</label>
+                <input type="number" id="length-input" class="converter-input" placeholder="0" value="1">
+                <select id="length-from-unit" class="custom-select">
+                    <option value="millimeters">Millimeters (mm)</option>
+                    <option value="centimeters">Centimeters (cm)</option>
+                    <option value="decimeter">Decimeter (dm)</option>
+                    <option value="meters" selected>Meters (m)</option>
+                    <option value="kilometers">Kilometers (km)</option>
+                    <option value="yards">Yards (yd)</option>
+                    <option value="miles">Miles (mi)</option>
+                    <option value="feet">Feet (ft)</option>
+                    <option value="inches">Inches (in)</option>
+                </select>
+            </div>
+            <div class="swap-button-container">
+                <button id="length-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+            </div>
+            <div class="converter-card">
+                <label class="converter-label">To:</label>
+                <div class="converter-output-display">
+                    <span id="length-output">3.28084</span>
+                </div>
+                <select id="length-to-unit" class="custom-select">
+                    <option value="millimeters">Millimeters (mm)</option>
+                    <option value="centimeters">Centimeters (cm)</option>
+                    <option value="decimeter">Decimeter (dm)</option>
+                    <option value="meters">Meters (m)</option>
+                    <option value="kilometers">Kilometers (km)</option>
+                    <option value="yards">Yards (yd)</option>
+                    <option value="miles">Miles (mi)</option>
+                    <option value="feet" selected>Feet (ft)</option>
+                    <option value="inches">Inches (in)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="mass-page" class="page-content hidden">
+        <div class="page-header">
+            <button id="menu-btn-mass" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Mass / Weight</h1>
+            <div class="spacer"></div>
+        </div>
+        <div class="converter-section">
+            <div class="converter-card">
+                <label class="converter-label">From:</label>
+                <input type="number" id="mass-input" class="converter-input" placeholder="0" value="1">
+                <select id="mass-from-unit" class="custom-select">
+                    <option value="kilograms">Kilograms (kg)</option>
+                    <option value="grams">Grams (g)</option>
+                    <option value="milligrams">Milligrams (mg)</option>
+                    <option value="pounds">Pounds (lb)</option>
+                    <option value="ounces">Ounces (oz)</option>
+                    <option value="tons">Metric Tons (t)</option>
+                </select>
+            </div>
+            <div class="swap-button-container">
+                <button id="mass-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+            </div>
+            <div class="converter-card">
+                <label class="converter-label">To:</label>
+                <div class="converter-output-display">
+                    <span id="mass-output">2.20462</span>
+                </div>
+                <select id="mass-to-unit" class="custom-select">
+                    <option value="kilograms">Kilograms (kg)</option>
+                    <option value="grams">Grams (g)</option>
+                    <option value="milligrams">Milligrams (mg)</option>
+                    <option value="pounds" selected>Pounds (lb)</option>
+                    <option value="ounces">Ounces (oz)</option>
+                    <option value="tons">Metric Tons (t)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="temperature-page" class="page-content hidden">
+        <div class="page-header">
+            <button id="menu-btn-temperature" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Temperature</h1>
+            <div class="spacer"></div>
+        </div>
+        <div class="converter-section">
+            <div class="converter-card">
+                <label class="converter-label">From:</label>
+                <input type="number" id="temperature-input" class="converter-input" placeholder="0" value="0">
+                <select id="temperature-from-unit" class="custom-select">
+                    <option value="celsius">Celsius (°C)</option>
+                    <option value="fahrenheit">Fahrenheit (°F)</option>
+                    <option value="kelvin">Kelvin (K)</option>
+                </select>
+            </div>
+            <div class="swap-button-container">
+                <button id="temperature-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+            </div>
+            <div class="converter-card">
+                <label class="converter-label">To:</label>
+                <div class="converter-output-display">
+                    <span id="temperature-output">32.00</span>
+                </div>
+                <select id="temperature-to-unit" class="custom-select">
+                    <option value="celsius">Celsius (°C)</option>
+                    <option value="fahrenheit" selected>Fahrenheit (°F)</option>
+                    <option value="kelvin">Kelvin (K)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="volume-page" class="page-content hidden">
+        <div class="page-header">
+            <button id="menu-btn-volume" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Volume</h1>
+            <div class="spacer"></div>
+        </div>
+        <div class="converter-section">
+            <div class="converter-card">
+                <label class="converter-label">From:</label>
+                <input type="number" id="volume-input" class="converter-input" placeholder="0" value="1">
+                <select id="volume-from-unit" class="custom-select">
+                    <option value="milliliters">Milliliters (mL)</option>
+                    <option value="centiliters">Centiiters (ml</option>
+                    <option value="deciliters">Deciliters (dl)</option>
+                    <option value="quartliters">Quarterliters (ql)</option>
+                    <option value="liters" selected>Liters (L)</option>
+                    <option value="gallons">Gallons (gal)</option>
+                    <option value="quarts">Quarts (qt)</option>
+                    <option value="pints">Pints (pt)</option>
+                    <option value="cups">Cups</option>
+                    <option value="fluidOunces">Fluid Ounces (fl oz)</option>
+                    <option value="tablespoons">Tablespoons (tbsp)</option>
+                    <option value="teaspoons">Teaspoons (tsp)</option>
+                </select>
+            </div>
+            <div class="swap-button-container">
+                <button id="volume-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+            </div>
+            <div class="converter-card">
+                <label class="converter-label">To:</label>
+                <div class="converter-output-display">
+                    <span id="volume-output">1000.00</span>
+                </div>
+                <select id="volume-to-unit" class="custom-select">
+                    <option value="milliliters" selected>Milliliters (mL)</option>
+                    <option value="centiliters">Centiiters (ml</option>
+                    <option value="deciliters">Deciliters (dl)</option>
+                    <option value="quartliters">Quarterliters (ql)</option>
+                    <option value="liters">Liters (L)</option>
+                    <option value="gallons">Gallons (gal)</option>
+                    <option value="quarts">Quarts (qt)</option>
+                    <option value="pints">Pints (pt)</option>
+                    <option value="cups">Cups</option>
+                    <option value="fluidOunces">Fluid Ounces (fl oz)</option>
+                    <option value="tablespoons">Tablespoons (tbsp)</option>
+                    <option value="teaspoons">Teaspoons (tsp)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="area-page" class="page-content hidden">
+        <div class="page-header">
+            <button id="menu-btn-area" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Area</h1>
+            <div class="spacer"></div>
+        </div>
+        <div class="converter-section">
+            <div class="converter-card">
+                <label class="converter-label">From:</label>
+                <input type="number" id="area-input" class="converter-input" placeholder="0" value="1">
+                <select id="area-from-unit" class="custom-select">
+                    <option value="squareCentimeters">Square Centimeters (cm²)</option>
+                    <option value="squareMeters">Square Meters (m²)</option>
+                    <option value="squareKilometers">Square Kilometers (km²)</option>
+                    <option value="squareFeet">Square Feet (ft²)</option>
+                    <option value="squareYards">Square Yards (yd²)</option>
+                    <option value="squareMiles">Square Miles (mi²)</option>
+                    <option value="acres">Acres</option>
+                    <option value="sqacres">Square Acres (sq)</option>
+                    <option value="hectares">Hectares (ha)</option>
+                </select>
+            </div>
+            <div class="swap-button-container">
+                <button id="area-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+            </div>
+            <div class="converter-card">
+                <label class="converter-label">To:</label>
+                <div class="converter-output-display">
+                    <span id="area-output">10.7639</span>
+                </div>
+                <select id="area-to-unit" class="custom-select">
+                    <option value="squareCentimeters">Square Centimeters (cm²)</option>
+                    <option value="squareMeters">Square Meters (m²)</option>
+                    <option value="squareKilometers">Square Kilometers (km²)</option>
+                    <option value="squareFeet" selected>Square Feet (ft²)</option>
+                    <option value="squareYards">Square Yards (yd²)</option>
+                    <option value="squareMiles">Square Miles (mi²)</option>
+                    <option value="acres">Acres</option>
+                    <option value="sqacres">Square Acres (sq)</option>
+                    <option value="hectares">Hectares (ha)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="speed-page" class="page-content hidden">
+        <div class="page-header">
+            <button id="menu-btn-speed" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Speed</h1>
+            <div class="spacer"></div>
+        </div>
+        <div class="converter-section">
+            <div class="converter-card">
+                <label class="converter-label">From:</label>
+                <input type="number" id="speed-input" class="converter-input" placeholder="0" value="100">
+                <select id="speed-from-unit" class="custom-select">
+                    <option value="metersPerSecond">Meters per Second (m/s)</option>
+                    <option value="kilometersPerHour" selected>Kilometers per Hour (km/h)</option>
+                    <option value="milesPerHour">Miles per Hour (mph)</option>
+                    <option value="feetPerSecond">Feet per Second (ft/s)</option>
+                    <option value="knots">Knots (kn)</option>
+                    <option value="mach">Mach</option>
+                </select>
+            </div>
+            <div class="swap-button-container">
+                <button id="speed-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+            </div>
+            <div class="converter-card">
+                <label class="converter-label">To:</label>
+                <div class="converter-output-display">
+                    <span id="speed-output">62.14</span>
+                </div>
+                <select id="speed-to-unit" class="custom-select">
+                    <option value="metersPerSecond">Meters per Second (m/s)</option>
+                    <option value="kilometersPerHour">Kilometers per Hour (km/h)</option>
+                    <option value="milesPerHour" selected>Miles per Hour (mph)</option>
+                    <option value="feetPerSecond">Feet per Second (ft/s)</option>
+                    <option value="knots">Knots (kn)</option>
+                    <option value="mach">Mach</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="time-page" class="page-content hidden">
+        <div class="page-header">
+            <button id="menu-btn-time" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Time</h1>
+            <div class="specer"></div>
+        </div>
+        <div class="converter-section">
+            <div class="converter-card">
+                <label class="converter-label">From:</label>
+                <input type="number" id="time-input" class="converter-input" placeholder="0" value="1" />
+                <select id="time-from-unit" class="custom-select">
+                    <option value="milliseconds">Milliseconds (ms)</option>
+                    <option value="seconds">Seconds (s)</option>
+                    <option value="minutes">Minutes (min)</option>
+                    <option value="hours" selected>Hours (hr)</option>
+                    <option value="days">Days</option>
+                    <option value="weeks">Weeks</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                    <option value="century">Century</option>
+                </select>
+            </div>
+            <div class="swap-button-container">
+                <button id="time-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+            </div>
+            <div class="converter-card"><label class="converter-label">To:</label>
+                <div class="converter-output-display"><span id="time-output">60.00</span></div><select id="time-to-unit"
+                    class="custom-select">
+                    <option value="milliseconds">Milliseconds (ms)</option>
+                    <option value="seconds">Seconds (s)</option>
+                    <option value="minutes" selected>Minutes (min)</option>
+                    <option value="hours">Hours (hr)</option>
+                    <option value="days">Days</option>
+                    <option value="weeks">Weeks</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                    <option value="century">Century</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="age-page" class="page-content hidden">
+        <div class="page-header">
+            <button id="menu-btn-age" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <h1 class="page-title">Age Extractor</h1>
+            <div class="spacer"></div>
+        </div>
+        <div class="converter-section">
+            <div class="converter-card">
+                <label for="dob-input" class="converter-label">Select Your Date of Birth:</label>
+                <input type="date" value="2006-09-30" id="dob-input" class="converter-input" />
+            </div>
+            <div class="swap-button-container">
+                <button id="calc-age-btn" class="swap-button" style="width: fit-content;">Calculate Age</button>
+            </div>
+            <div class="converter-card">
+                <label class="age-result-label">Your Age:</label>
+                <div id="age-result" class="converter-output-display">--</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="src/app.js"></script>
+</body>
+
+</html>
