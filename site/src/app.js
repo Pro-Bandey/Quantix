@@ -3,13 +3,37 @@ let previousInput = '';
 let operator = '';
 let shouldResetDisplay = false;
 let currentPage = 'calculator';
-let isDropdownOpen = false;
 let currencyRates = {};
 let lastUpdated = '';
-const equationDisplay = document.getElementById('equation');
-const resultDisplay = document.getElementById('result');
 
-const extApi = typeof browser !== "undefined" ? browser : chrome;
+// Browser/Web Extension Storage Wrapper Fallback
+const extApi = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
+
+const storage = {
+    set: function (data, callback) {
+        if (extApi && extApi.storage && extApi.storage.local) {
+            extApi.storage.local.set(data, callback);
+        } else {
+            for (let key in data) {
+                localStorage.setItem(key, JSON.stringify(data[key]));
+            }
+            if (callback) callback();
+        }
+    },
+    get: function (keys, callback) {
+        if (extApi && extApi.storage && extApi.storage.local) {
+            extApi.storage.local.get(keys, callback);
+        } else {
+            let result = {};
+            const keysArray = Array.isArray(keys) ? keys : [keys];
+            keysArray.forEach(k => {
+                let val = localStorage.getItem(k);
+                result[k] = val ? JSON.parse(val) : undefined;
+            });
+            if (callback) callback(result);
+        }
+    }
+};
 
 const menuBtns = [
     document.getElementById('menu-btn-calculator'),
@@ -26,6 +50,8 @@ const menuBtns = [
 
 /* === Currency Elements === */
 const currencyInput = document.getElementById('currency-input');
+const currencyFromSearch = document.getElementById('currency-from-search');
+const currencyToSearch = document.getElementById('currency-to-search');
 const currencyFromUnit = document.getElementById('currency-from-unit');
 const currencyToUnit = document.getElementById('currency-to-unit');
 const currencyOutput = document.getElementById('currency-output');
@@ -62,32 +88,36 @@ const volumeToUnit = document.getElementById('volume-to-unit');
 const volumeOutput = document.getElementById('volume-output');
 const volumeSwapBtn = document.getElementById('volume-swap-btn');
 
-/* === Menu === */
-const menuOverlay = document.getElementById('menu-overlay');
-const menuSidebar = document.getElementById('menu-sidebar');
-const closeMenuBtn = document.getElementById('close-menu-btn');
-
+/* === Area Elements === */
 const areaInput = document.getElementById('area-input');
 const areaFromUnit = document.getElementById('area-from-unit');
 const areaToUnit = document.getElementById('area-to-unit');
 const areaOutput = document.getElementById('area-output');
 const areaSwapBtn = document.getElementById('area-swap-btn');
 
+/* === Speed Elements === */
 const speedInput = document.getElementById('speed-input');
 const speedFromUnit = document.getElementById('speed-from-unit');
 const speedToUnit = document.getElementById('speed-to-unit');
 const speedOutput = document.getElementById('speed-output');
 const speedSwapBtn = document.getElementById('speed-swap-btn');
 
+/* === Time Elements === */
 const timeInput = document.getElementById('time-input');
 const timeFromUnit = document.getElementById('time-from-unit');
 const timeToUnit = document.getElementById('time-to-unit');
 const timeOutput = document.getElementById('time-output');
 const timeSwapBtn = document.getElementById('time-swap-btn');
 
+/* === Age Elements === */
 const dobInput = document.getElementById('dob-input');
 const ageResult = document.getElementById('age-result');
 const calcAgeBtn = document.getElementById('calc-age-btn');
+
+/* === Menu Overlay & Sidebar === */
+const menuOverlay = document.getElementById('menu-overlay');
+const menuSidebar = document.getElementById('menu-sidebar');
+const closeMenuBtn = document.getElementById('close-menu-btn');
 
 /* === Pages === */
 const calculatorPage = document.getElementById('calculator-page');
@@ -112,11 +142,23 @@ const speedMenuBtn = document.getElementById('speed-menu-btn');
 const timeMenuBtn = document.getElementById('time-menu-btn');
 const ageMenuBtn = document.getElementById('age-menu-btn');
 
-const measurementsSubmenu = document.getElementById('measurements-submenu');
-const measurementsArrow = document.getElementById('measurements-arrow');
+const pageMenuButtons = {
+    calculator: calculatorMenuBtn,
+    currency: currencyMenuBtn,
+    length: lengthMenuBtn,
+    mass: massMenuBtn,
+    temperature: temperatureMenuBtn,
+    volume: volumeMenuBtn,
+    area: areaMenuBtn,
+    speed: speedMenuBtn,
+    time: timeMenuBtn,
+    age: ageMenuBtn
+};
+
+const equationDisplay = document.getElementById('equation');
+const resultDisplay = document.getElementById('result');
 
 /* ===  FORMULAS  === */
-
 const massFormulas = {
     toBase: {
         kilograms: v => v,
@@ -295,16 +337,13 @@ function closeMenu() {
 }
 
 function showPage(pageToShow) {
-    calculatorPage.classList.add('hidden');
-    currencyPage.classList.add('hidden');
-    lengthPage.classList.add('hidden');
-    massPage.classList.add('hidden');
-    temperaturePage.classList.add('hidden');
-    volumePage.classList.add('hidden');
-    areaPage.classList.add('hidden');
-    speedPage.classList.add('hidden');
-    timePage.classList.add('hidden');
-    agePage.classList.add('hidden');
+    const pages = [
+        calculatorPage, currencyPage, lengthPage, massPage,
+        temperaturePage, volumePage, areaPage, speedPage,
+        timePage, agePage
+    ];
+
+    pages.forEach(p => p && p.classList.add('hidden'));
 
     switch (pageToShow) {
         case 'calculator': calculatorPage.classList.remove('hidden'); break;
@@ -321,8 +360,36 @@ function showPage(pageToShow) {
     }
 
     currentPage = pageToShow;
+
+    // Sync menu selected visual state
+    Object.keys(pageMenuButtons).forEach(key => {
+        if (pageMenuButtons[key]) {
+            if (key === pageToShow) {
+                pageMenuButtons[key].classList.add('active');
+            } else {
+                pageMenuButtons[key].classList.remove('active');
+            }
+        }
+    });
+
     closeMenu();
 }
+
+// Collapsible Sidebar Accordions
+const groupHeaders = document.querySelectorAll('.menu-group-header');
+groupHeaders.forEach(header => {
+    header.addEventListener('click', () => {
+        const group = header.parentElement;
+        const isCollapsed = group.classList.contains('collapsed');
+        if (isCollapsed) {
+            group.classList.remove('collapsed');
+            header.setAttribute('aria-expanded', 'true');
+        } else {
+            group.classList.add('collapsed');
+            header.setAttribute('aria-expanded', 'false');
+        }
+    });
+});
 
 /* ===  CALCULATOR FUNCTIONS  === */
 function updateDisplay() {
@@ -341,7 +408,7 @@ function inputNumber(number) {
 
 function inputOperator(nextOperator) {
     if (previousInput && currentInput && operator) calculate();
-    previousInput = currentInput;
+    previousInput = currentInput || previousInput || '0';
     operator = nextOperator;
     currentInput = '';
     updateDisplay();
@@ -388,7 +455,7 @@ function backspace() {
     }
 }
 
-/* ===  CONVERTER FUNCTIONS  === */
+/* ===  CONVERTER LOGIC  === */
 function convertMass() {
     const inputValue = parseFloat(massInput.value);
     if (isNaN(inputValue)) return massOutput.textContent = '0';
@@ -398,6 +465,7 @@ function convertMass() {
 function swapMassUnits() {
     [massFromUnit.value, massToUnit.value] = [massToUnit.value, massFromUnit.value];
     convertMass();
+    savePreferences();
 }
 
 function convertLength() {
@@ -409,6 +477,7 @@ function convertLength() {
 function swapLengthUnits() {
     [lengthFromUnit.value, lengthToUnit.value] = [lengthToUnit.value, lengthFromUnit.value];
     convertLength();
+    savePreferences();
 }
 
 function convertTemperature() {
@@ -419,6 +488,7 @@ function convertTemperature() {
 function swapTemperatureUnits() {
     [temperatureFromUnit.value, temperatureToUnit.value] = [temperatureToUnit.value, temperatureFromUnit.value];
     convertTemperature();
+    savePreferences();
 }
 
 function convertVolume() {
@@ -430,6 +500,7 @@ function convertVolume() {
 function swapVolumeUnits() {
     [volumeFromUnit.value, volumeToUnit.value] = [volumeToUnit.value, volumeFromUnit.value];
     convertVolume();
+    savePreferences();
 }
 
 function convertArea() {
@@ -441,6 +512,7 @@ function convertArea() {
 function swapAreaUnits() {
     [areaFromUnit.value, areaToUnit.value] = [areaToUnit.value, areaFromUnit.value];
     convertArea();
+    savePreferences();
 }
 
 function convertSpeed() {
@@ -452,6 +524,7 @@ function convertSpeed() {
 function swapSpeedUnits() {
     [speedFromUnit.value, speedToUnit.value] = [speedToUnit.value, speedFromUnit.value];
     convertSpeed();
+    savePreferences();
 }
 
 function convertTime() {
@@ -463,6 +536,7 @@ function convertTime() {
 function swapTimeUnits() {
     [timeFromUnit.value, timeToUnit.value] = [timeToUnit.value, timeFromUnit.value];
     convertTime();
+    savePreferences();
 }
 
 /* ===  AGE CALCULATOR  === */
@@ -489,11 +563,11 @@ function calculateAge() {
     ageResult.textContent = `${years} years, ${months} months, ${days} days`;
 }
 
-/* ===  CURRENCY API + CONVERTER  === */
+/* ===  CURRENCY API + CONVERTER (Offline Caching Fallback) === */
 function convertCurrency() {
     const inputValue = parseFloat(currencyInput.value);
     if (isNaN(inputValue)) return currencyOutput.textContent = '0.00';
-    if (!Object.keys(currencyRates).length) return currencyOutput.textContent = 'Loading...';
+    if (!Object.keys(currencyRates).length) return currencyOutput.textContent = 'Offline rates...';
 
     const inUSD = inputValue / currencyRates[currencyFromUnit.value];
     const result = inUSD * currencyRates[currencyToUnit.value];
@@ -504,28 +578,61 @@ function convertCurrency() {
 function swapCurrencyUnits() {
     [currencyFromUnit.value, currencyToUnit.value] = [currencyToUnit.value, currencyFromUnit.value];
     convertCurrency();
+    savePreferences();
 }
 
 async function fetchExchangeRates() {
+    const apiUrl = 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json';
     try {
-        const apiKey = 'df6815c6703843997dab033e';
-        const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Network request failed");
         const data = await response.json();
 
-        currencyRates = data.conversion_rates;
-        lastUpdated = data.time_last_update_utc;
+        // Convert lowercase keys to uppercase for standard ISO dropdown support
+        const rawRates = data.usd;
+        const uppercaseRates = {};
+        for (const key in rawRates) {
+            uppercaseRates[key.toUpperCase()] = rawRates[key];
+        }
 
-        populateCurrencyDropdowns();
-        lastUpdatedElement.textContent = new Date(lastUpdated).toLocaleDateString();
+        currencyRates = uppercaseRates;
+        lastUpdated = data.date;
 
-        loadingIndicator.style.display = 'none';
-        converterSection.classList.remove('hidden');
-        converterSection.classList.add('flex');
+        // Save normalized rates to storage fallback for offline support
+        storage.set({
+            offlineRatesCache: currencyRates,
+            offlineRatesLastUpdate: lastUpdated
+        });
 
-        convertCurrency();
+        processExchangeRates();
     } catch {
-        loadingIndicator.innerHTML = '<p class="text-red-500 text-center">Failed to load rates. Please refresh.</p>';
+        // Recover using Offline cached state if network requests fail
+        storage.get(['offlineRatesCache', 'offlineRatesLastUpdate'], result => {
+            if (result && result.offlineRatesCache) {
+                currencyRates = result.offlineRatesCache;
+                lastUpdated = result.offlineRatesLastUpdate || 'Cached';
+                processExchangeRates();
+            } else {
+                loadingIndicator.innerHTML = '<p class="text-red-500 text-center">Connection error. No offline rates are stored.</p>';
+            }
+        });
     }
+}
+
+function processExchangeRates() {
+    populateCurrencyDropdowns();
+    lastUpdatedElement.textContent = new Date(lastUpdated).toLocaleDateString() || lastUpdated;
+
+    loadingIndicator.style.display = 'none';
+    converterSection.classList.remove('hidden');
+    converterSection.classList.add('flex');
+
+    // Bind Live dropdown search filters
+    filterDropdown(currencyFromSearch, currencyFromUnit);
+    filterDropdown(currencyToSearch, currencyToUnit);
+
+    loadPreferences();
+    convertCurrency();
 }
 
 function populateCurrencyDropdowns() {
@@ -549,8 +656,74 @@ function populateCurrencyDropdowns() {
     currencyToUnit.value = 'PKR';
 }
 
+function filterDropdown(searchEl, selectEl) {
+    searchEl.addEventListener('input', () => {
+        const query = searchEl.value.toLowerCase().trim();
+        const options = selectEl.options;
+        let firstMatch = null;
 
-/* ===  PREFERENCES (Chrome Storage)  === */
+        for (let i = 0; i < options.length; i++) {
+            const opt = options[i];
+            const text = opt.textContent.toLowerCase();
+            if (text.includes(query)) {
+                opt.style.display = '';
+                if (!firstMatch) firstMatch = opt.value;
+            } else {
+                opt.style.display = 'none';
+            }
+        }
+
+        // Auto-select first matching option if the current selection is hidden
+        if (firstMatch && selectEl.selectedOptions[0].style.display === 'none') {
+            selectEl.value = firstMatch;
+            convertCurrency();
+            savePreferences();
+        }
+    });
+}
+
+/* ===  THEME SWITCH UTILS (Manual Preference Toggle) === */
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const themeIconPath = document.getElementById('theme-icon-path');
+const themeBtnText = document.getElementById('theme-btn-text');
+
+const sunPath = "M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1zm0 16a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 1-1zM5.64 4.22a1 1 0 0 1 1.41 0l1.42 1.42a1 1 0 0 1-1.42 1.41L5.64 5.64a1 1 0 0 1 0-1.41zm11.31 11.31a1 1 0 0 1 1.42 0l1.41 1.41a1 1 0 0 1-1.41 1.42l-1.42-1.42a1 1 0 0 1 0-1.41zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 0 2H2a1 1 0 0 1-1-1zm16 0a1 1 0 0 1 1-1h2a1 1 0 0 1 0 2h-2a1 1 0 0 1-1-1zM5.64 19.78a1 1 0 0 1 0-1.41l1.42-1.42a1 1 0 0 1 1.41 1.42l-1.42 1.41a1 1 0 0 1-1.41 0zm11.31-11.31a1 1 0 0 1 0-1.41l1.42-1.42a1 1 0 0 1 1.41 1.42l-1.42 1.41a1 1 0 0 1-1.41 0z";
+const moonPath = "M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z";
+
+function applyTheme(theme) {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+        root.classList.add('dark-theme');
+        root.classList.remove('light-theme');
+        if (themeIconPath) themeIconPath.setAttribute('d', sunPath);
+        if (themeBtnText) themeBtnText.textContent = "Light Mode";
+    } else {
+        root.classList.add('light-theme');
+        root.classList.remove('dark-theme');
+        if (themeIconPath) themeIconPath.setAttribute('d', moonPath);
+        if (themeBtnText) themeBtnText.textContent = "Dark Mode";
+    }
+}
+
+themeToggleBtn.addEventListener('click', () => {
+    const root = document.documentElement;
+    const currentTheme = root.classList.contains('dark-theme') ? 'dark' : 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+    storage.set({ selectedTheme: newTheme });
+});
+
+// Load stored theme or evaluate native system scheme
+storage.get(['selectedTheme'], result => {
+    if (result && result.selectedTheme) {
+        applyTheme(result.selectedTheme);
+    } else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(prefersDark ? 'dark' : 'light');
+    }
+});
+
+/* ===  PREFERENCES (Cross-compatible Chrome / Web Storage)  === */
 function savePreferences() {
     const prefs = {
         lastCurrencyFrom: currencyFromUnit.value,
@@ -571,17 +744,16 @@ function savePreferences() {
         lastTimeFrom: timeFromUnit.value,
         lastTimeTo: timeToUnit.value
     };
-
-    extApi.storage.local.set({ userPreferences: prefs });
+    storage.set({ userPreferences: prefs });
 }
 
 function loadPreferences() {
-    extApi.storage.local.get(['userPreferences'], result => {
+    storage.get(['userPreferences'], result => {
         const prefs = result.userPreferences;
         if (!prefs) return;
 
-        if (prefs.lastCurrencyFrom) currencyFromUnit.value = prefs.lastCurrencyFrom;
-        if (prefs.lastCurrencyTo) currencyToUnit.value = prefs.lastCurrencyTo;
+        if (prefs.lastCurrencyFrom && currencyFromUnit.options.length) currencyFromUnit.value = prefs.lastCurrencyFrom;
+        if (prefs.lastCurrencyTo && currencyToUnit.options.length) currencyToUnit.value = prefs.lastCurrencyTo;
         if (prefs.lastCurrencyAmount) currencyInput.value = prefs.lastCurrencyAmount;
 
         if (prefs.lastLengthFrom) lengthFromUnit.value = prefs.lastLengthFrom;
@@ -605,6 +777,103 @@ function loadPreferences() {
         if (prefs.lastTimeFrom) timeFromUnit.value = prefs.lastTimeFrom;
         if (prefs.lastTimeTo) timeToUnit.value = prefs.lastTimeTo;
     });
+}
+
+/* ===  KEYBOARD NAVIGATOR SHORTCUTS === */
+window.addEventListener('keydown', (e) => {
+    // 1. Swap shortcut key listener: s / S or Control + S
+    if ((e.key === 's' || e.key === 'S') && !e.altKey && !e.shiftKey) {
+        // Prevent default save behavior when using Ctrl+S
+        if (e.ctrlKey) e.preventDefault();
+
+        // Ensure standard input is not focused to prevent blocking typed text
+        const tag = document.activeElement.tagName.toLowerCase();
+        if (tag !== 'input' && tag !== 'textarea') {
+            triggerCurrentPageSwap();
+        }
+    }
+
+    // 2. Swapping pages using Arrow Keys when no inputs are focused
+    const focusedTag = document.activeElement.tagName.toLowerCase();
+    const isTyping = focusedTag === 'input' || focusedTag === 'textarea' || focusedTag === 'select';
+
+    if (!isTyping) {
+        const sections = [
+            'calculator', 'age', 'currency', 'length', 'mass',
+            'temperature', 'volume', 'area', 'speed', 'time'
+        ];
+        let index = sections.indexOf(currentPage);
+
+        if (e.key === 'ArrowDown') {
+            index = (index + 1) % sections.length;
+            showPage(sections[index]);
+        } else if (e.key === 'ArrowUp') {
+            index = (index - 1 + sections.length) % sections.length;
+            showPage(sections[index]);
+        }
+    }
+
+    // 3. Calculator page specific numeric key overrides
+    if (currentPage === 'calculator') {
+        processCalculatorKeyboard(e);
+    }
+});
+
+function triggerCurrentPageSwap() {
+    switch (currentPage) {
+        case 'currency': swapCurrencyUnits(); break;
+        case 'length': swapLengthUnits(); break;
+        case 'mass': swapMassUnits(); break;
+        case 'temperature': swapTemperatureUnits(); break;
+        case 'volume': swapVolumeUnits(); break;
+        case 'area': swapAreaUnits(); break;
+        case 'speed': swapSpeedUnits(); break;
+        case 'time': swapTimeUnits(); break;
+    }
+}
+
+function processCalculatorKeyboard(e) {
+    const val = e.key;
+    let clickId = '';
+
+    if (val >= '0' && val <= '9') {
+        inputNumber(val);
+        clickId = `${val}-btn`;
+    } else if (val === '.') {
+        inputNumber('.');
+        clickId = 'dot-btn';
+    } else if (val === '+') {
+        inputOperator('+');
+        clickId = 'plus-btn';
+    } else if (val === '-') {
+        inputOperator('-');
+        clickId = 'minus-btn';
+    } else if (val === '*' || val === 'x' || val === 'X') {
+        inputOperator('×');
+        clickId = 'mult-btn';
+    } else if (val === '/') {
+        e.preventDefault();
+        inputOperator('÷');
+        clickId = 'divide-btn';
+    } else if (val === 'Enter' || val === '=') {
+        e.preventDefault();
+        calculate();
+        clickId = 'equal-btn';
+    } else if (val === 'Backspace') {
+        backspace();
+        clickId = 'backspace-btn';
+    } else if (val === 'Delete' || val === 'Escape') {
+        clearCalculator();
+        clickId = 'ac-btn';
+    }
+
+    if (clickId) {
+        const targetBtn = document.getElementById(clickId);
+        if (targetBtn) {
+            targetBtn.classList.add('keyboard-active');
+            setTimeout(() => targetBtn.classList.remove('keyboard-active'), 120);
+        }
+    }
 }
 
 /* ===  EVENT LISTENERS  === */

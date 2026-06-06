@@ -3,8 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Quantix - Calculator & Unit Converter</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Quantix is a lightweight, responsive utility calculator and comprehensive unit converter.">
+    <meta name="keywords" content="calculator, currency converter, unit converter, age calculator, standard converter, chrome extension, firefox add-on">
+    <meta name="author" content="Pro Bandey">
+    <meta name="robots" content="index, follow">
+    
     <link rel="stylesheet" href="src/style.css">
 </head>
 
@@ -15,53 +22,99 @@
             <h2 class="menu-title">Quantix Vertors</h2>
             <button id="close-menu-btn" class="close-menu-button">×</button>
         </div>
+        
         <div class="menu-items-container">
-            <button id="calculator-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-calc"></use></svg>
-                <span class="menu-item-text">Calculator</span>
-            </button>
-            <button id="currency-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-currency"></use></svg>
-                <span class="menu-item-text">Currency Converter</span>
-            </button>
-            <button id="length-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-lenght"></use></svg>
-                <span class="menu-item-text">Length / Distance</span>
-            </button>
-            <button id="mass-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-mass"></use></svg>
-                <span class="menu-item-text">Mass / Weight</span>
-            </button>
-            <button id="temperature-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-temperature"></use></svg>
-                <span class="menu-item-text">Temperature</span>
-            </button>
-            <button id="volume-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-volume"></use></svg>
-                <span class="menu-item-text">Volume</span>
-            </button>
-            <button id="area-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-area"></use></svg>
-                <span class="menu-item-text">Area</span>
-            </button>
-            <button id="speed-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-speed"></use></svg>
-                <span class="menu-item-text">Speed</span>
-            </button>
-            <button id="time-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-time"></use></svg>
-                <span class="menu-item-text">Time</span>
-            </button>
-            <button id="age-menu-btn" class="menu-item-button">
-                <svg class="menu-item-icon"><use href="src/icons.svg#icon-age"></use></svg>
-                <span class="menu-item-text">Age Extractor</span>
+            <!-- Group 1: Standard Utilities -->
+            <div class="menu-group" id="group-utilities">
+                <button class="menu-group-header" aria-expanded="true">
+                    <span>Utilities</span>
+                    <svg class="menu-group-header-arrow">
+                        <use href="src/icons.svg#icon-arrow" xlink:href="src/icons.svg#icon-arrow"></use>
+                    </svg>
+                </button>
+                <div class="menu-group-items">
+                    <button id="calculator-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-calc" xlink:href="src/icons.svg#icon-calc"></use></svg>
+                        <span class="menu-item-text">Calculator</span>
+                    </button>
+                    <button id="age-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-age" xlink:href="src/icons.svg#icon-age"></use></svg>
+                        <span class="menu-item-text">Age Extractor</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Group 2: Financial -->
+            <div class="menu-group" id="group-financial">
+                <button class="menu-group-header" aria-expanded="true">
+                    <span>Financial</span>
+                    <svg class="menu-group-header-arrow">
+                        <use href="src/icons.svg#icon-arrow" xlink:href="src/icons.svg#icon-arrow"></use>
+                    </svg>
+                </button>
+                <div class="menu-group-items">
+                    <button id="currency-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-currency"></use></svg>
+                        <span class="menu-item-text">Currency Converter</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Group 3: Measurements -->
+            <div class="menu-group" id="group-measurements">
+                <button class="menu-group-header" aria-expanded="true">
+                    <span>Measurements</span>
+                    <svg class="menu-group-header-arrow">
+                        <use href="src/icons.svg#icon-arrow" xlink:href="src/icons.svg#icon-arrow"></use>
+                    </svg>
+                </button>
+                <div class="menu-group-items">
+                    <button id="length-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-lenght" xlink:href="src/icons.svg#icon-lenght"></use></svg>
+                        <span class="menu-item-text">Length / Distance</span>
+                    </button>
+                    <button id="mass-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-mass" xlink:href="src/icons.svg#icon-mass"></use></svg>
+                        <span class="menu-item-text">Mass / Weight</span>
+                    </button>
+                    <button id="temperature-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-temperature" xlink:href="src/icons.svg#icon-temperature"></use></svg>
+                        <span class="menu-item-text">Temperature</span>
+                    </button>
+                    <button id="volume-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-volume" xlink:href="src/icons.svg#icon-volume"></use></svg>
+                        <span class="menu-item-text">Volume</span>
+                    </button>
+                    <button id="area-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-area" xlink:href="src/icons.svg#icon-area"></use></svg>
+                        <span class="menu-item-text">Area</span>
+                    </button>
+                    <button id="speed-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-speed" xlink:href="src/icons.svg#icon-speed"></use></svg>
+                        <span class="menu-item-text">Speed</span>
+                    </button>
+                    <button id="time-menu-btn" class="menu-item-button">
+                        <svg class="menu-item-icon"><use href="src/icons.svg#icon-time" xlink:href="src/icons.svg#icon-time"></use></svg>
+                        <span class="menu-item-text">Time</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-switch-container">
+            <button id="theme-toggle-btn" class="theme-switch-button">
+                <svg class="theme-switch-icon" viewBox="0 0 24 24">
+                    <path id="theme-icon-path" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+                </svg>
+                <span id="theme-btn-text">Dark Mode</span>
             </button>
         </div>
     </div>
 
+    <!-- Page Content Area -->
     <div id="calculator-page" class="page-content">
         <div class="page-header">
-            <button id="menu-btn-calculator" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-calculator" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Calculator</h1>
             <div class="spacer"></div>
         </div>
@@ -99,7 +152,7 @@
 
     <div id="currency-page" class="page-content hidden">
         <div class="page-header">
-            <button id="menu-btn-currency" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-currency" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Currency</h1>
             <div class="spacer"></div>
         </div>
@@ -110,17 +163,23 @@
             <div class="converter-card">
                 <label class="converter-label">From:</label>
                 <input type="number" id="currency-input" class="converter-input" placeholder="0" value="100">
+                <div class="dropdown-search-wrapper">
+                    <input type="text" id="currency-from-search" class="dropdown-search-field" placeholder="Search From Currency...">
+                </div>
                 <select id="currency-from-unit" class="custom-select">
                     <option value="">Loading currencies...</option>
                 </select>
             </div>
             <div class="swap-button-container">
-                <button id="currency-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+                <button id="currency-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap" xlink:href="src/icons.svg#icon-swap"></use></svg></button>
             </div>
             <div class="converter-card">
                 <label class="converter-label">To:</label>
                 <div class="converter-output-display">
                     <span id="currency-output">0.00</span>
+                </div>
+                <div class="dropdown-search-wrapper">
+                    <input type="text" id="currency-to-search" class="dropdown-search-field" placeholder="Search To Currency...">
                 </div>
                 <select id="currency-to-unit" class="custom-select">
                     <option value="">Loading currencies...</option>
@@ -134,7 +193,7 @@
 
     <div id="length-page" class="page-content hidden">
         <div class="page-header">
-            <button id="menu-btn-length" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-length" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Length / Distance</h1>
             <div class="spacer"></div>
         </div>
@@ -155,7 +214,7 @@
                 </select>
             </div>
             <div class="swap-button-container">
-                <button id="length-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+                <button id="length-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap" xlink:href="src/icons.svg#icon-swap"></use></svg></button>
             </div>
             <div class="converter-card">
                 <label class="converter-label">To:</label>
@@ -179,7 +238,7 @@
 
     <div id="mass-page" class="page-content hidden">
         <div class="page-header">
-            <button id="menu-btn-mass" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-mass" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Mass / Weight</h1>
             <div class="spacer"></div>
         </div>
@@ -197,7 +256,7 @@
                 </select>
             </div>
             <div class="swap-button-container">
-                <button id="mass-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+                <button id="mass-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap" xlink:href="src/icons.svg#icon-swap"></use></svg></button>
             </div>
             <div class="converter-card">
                 <label class="converter-label">To:</label>
@@ -218,7 +277,7 @@
 
     <div id="temperature-page" class="page-content hidden">
         <div class="page-header">
-            <button id="menu-btn-temperature" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-temperature" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Temperature</h1>
             <div class="spacer"></div>
         </div>
@@ -233,7 +292,7 @@
                 </select>
             </div>
             <div class="swap-button-container">
-                <button id="temperature-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+                <button id="temperature-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap" xlink:href="src/icons.svg#icon-swap"></use></svg></button>
             </div>
             <div class="converter-card">
                 <label class="converter-label">To:</label>
@@ -251,7 +310,7 @@
 
     <div id="volume-page" class="page-content hidden">
         <div class="page-header">
-            <button id="menu-btn-volume" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-volume" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Volume</h1>
             <div class="spacer"></div>
         </div>
@@ -261,7 +320,7 @@
                 <input type="number" id="volume-input" class="converter-input" placeholder="0" value="1">
                 <select id="volume-from-unit" class="custom-select">
                     <option value="milliliters">Milliliters (mL)</option>
-                    <option value="centiliters">Centiiters (ml</option>
+                    <option value="centiliters">Centiliters (cl)</option>
                     <option value="deciliters">Deciliters (dl)</option>
                     <option value="quartliters">Quarterliters (ql)</option>
                     <option value="liters" selected>Liters (L)</option>
@@ -275,7 +334,7 @@
                 </select>
             </div>
             <div class="swap-button-container">
-                <button id="volume-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+                <button id="volume-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap" xlink:href="src/icons.svg#icon-swap"></use></svg></button>
             </div>
             <div class="converter-card">
                 <label class="converter-label">To:</label>
@@ -284,7 +343,7 @@
                 </div>
                 <select id="volume-to-unit" class="custom-select">
                     <option value="milliliters" selected>Milliliters (mL)</option>
-                    <option value="centiliters">Centiiters (ml</option>
+                    <option value="centiliters">Centiliters (cl)</option>
                     <option value="deciliters">Deciliters (dl)</option>
                     <option value="quartliters">Quarterliters (ql)</option>
                     <option value="liters">Liters (L)</option>
@@ -302,7 +361,7 @@
 
     <div id="area-page" class="page-content hidden">
         <div class="page-header">
-            <button id="menu-btn-area" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-area" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Area</h1>
             <div class="spacer"></div>
         </div>
@@ -323,7 +382,7 @@
                 </select>
             </div>
             <div class="swap-button-container">
-                <button id="area-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+                <button id="area-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap" xlink:href="src/icons.svg#icon-swap"></use></svg></button>
             </div>
             <div class="converter-card">
                 <label class="converter-label">To:</label>
@@ -347,7 +406,7 @@
 
     <div id="speed-page" class="page-content hidden">
         <div class="page-header">
-            <button id="menu-btn-speed" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-speed" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Speed</h1>
             <div class="spacer"></div>
         </div>
@@ -365,7 +424,7 @@
                 </select>
             </div>
             <div class="swap-button-container">
-                <button id="speed-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+                <button id="speed-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap" xlink:href="src/icons.svg#icon-swap"></use></svg></button>
             </div>
             <div class="converter-card">
                 <label class="converter-label">To:</label>
@@ -383,11 +442,12 @@
             </div>
         </div>
     </div>
+
     <div id="time-page" class="page-content hidden">
         <div class="page-header">
-            <button id="menu-btn-time" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-time" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Time</h1>
-            <div class="specer"></div>
+            <div class="spacer"></div>
         </div>
         <div class="converter-section">
             <div class="converter-card">
@@ -406,11 +466,14 @@
                 </select>
             </div>
             <div class="swap-button-container">
-                <button id="time-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap"></use></svg></button>
+                <button id="time-swap-btn" class="swap-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-swap" xlink:href="src/icons.svg#icon-swap"></use></svg></button>
             </div>
-            <div class="converter-card"><label class="converter-label">To:</label>
-                <div class="converter-output-display"><span id="time-output">60.00</span></div><select id="time-to-unit"
-                    class="custom-select">
+            <div class="converter-card">
+                <label class="converter-label">To:</label>
+                <div class="converter-output-display">
+                    <span id="time-output">60.00</span>
+                </div>
+                <select id="time-to-unit" class="custom-select">
                     <option value="milliseconds">Milliseconds (ms)</option>
                     <option value="seconds">Seconds (s)</option>
                     <option value="minutes" selected>Minutes (min)</option>
@@ -424,9 +487,10 @@
             </div>
         </div>
     </div>
+
     <div id="age-page" class="page-content hidden">
         <div class="page-header">
-            <button id="menu-btn-age" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu"></use></svg></button>
+            <button id="menu-btn-age" class="page-menu-button"><svg class="menu-item-icon"><use href="src/icons.svg#icon-menu" xlink:href="src/icons.svg#icon-menu"></use></svg></button>
             <h1 class="page-title">Age Extractor</h1>
             <div class="spacer"></div>
         </div>
@@ -439,7 +503,7 @@
                 <button id="calc-age-btn" class="swap-button" style="width: fit-content;">Calculate Age</button>
             </div>
             <div class="converter-card">
-                <label class="age-result-label">Your Age:</label>
+                <label class="converter-label">Your Age:</label>
                 <div id="age-result" class="converter-output-display">--</div>
             </div>
         </div>
