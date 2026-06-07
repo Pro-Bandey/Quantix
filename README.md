@@ -6,6 +6,12 @@ The application emphasizes offline reliability, standard keyboard and numpad acc
 
 ---
 
+## Availability
+
+[![Addons Store](https://raw.githubusercontent.com/Pro-Bandey/Shield-Authenticator/main/src/firefox.webp)](https://addons.mozilla.org/firefox/addon/Quantix/)
+
+---
+
 ## Features
 
 ### 1. Interactive Core Utilities
