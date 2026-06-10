@@ -4,7 +4,7 @@ browser.runtime.onInstalled.addListener(() => {
         browser.contextMenus.create({
             id: "open-side-panel",
             title: "Open Quantix Panel",
-            contexts: ["all"]
+            contexts: ["page"]
         });
     });
 });

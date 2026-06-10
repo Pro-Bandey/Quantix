@@ -4,7 +4,7 @@ chrome.runtime.onInstalled.addListener(() => {
         chrome.contextMenus.create({
             id: "open-side-panel",
             title: "Open Quantix Panel",
-            contexts: ["all"]
+            contexts: ["page"]
         });
     });
     chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
