@@ -1,6 +1,6 @@
 {
-  "name": "Qauntix",
-  "short_name": "Qauntix",
+  "name": "Quantix",
+  "short_name": "Quantix",
   "description": "Quantix | The All-in-One Multi Calculator for Math & Sciences",
   "scope": "/Quantix/",
   "id": "/Quantix/",
@@ -80,7 +80,7 @@
   "shortcuts": [
     {
       "name": "Open",
-      "description": "Open Qauntix",
+      "description": "Open Quantix",
       "url": "./main/",
       "icons": [
         {
